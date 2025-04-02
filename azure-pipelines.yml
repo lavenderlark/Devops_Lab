@@ -13,9 +13,8 @@ steps:
 
 # Ensure Maven is available and in PATH
 - script: |
-    set MAVEN_HOME=C:\Users\apache-maven-3.9.9
-    set PATH=%MAVEN_HOME%\bin;%PATH%
-    echo "Maven path: %MAVEN_HOME%\bin"
+    set PATH=C:\Users\apache-maven-3.9.9\bin;%PATH%
+    echo "Maven path: C:\Users\apache-maven-3.9.9\bin"
   displayName: 'Set MAVEN_HOME'
 
 # Verify Java & Maven installation
