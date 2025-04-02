@@ -7,23 +7,28 @@ pool:
 steps:
 # Ensure JAVA_HOME is correctly set
 - script: |
-    echo "##vso[task.setvariable variable=JAVA_HOME]C:\Program Files\Java\jdk-21"
-    echo "##vso[task.setvariable variable=PATH]%JAVA_HOME%\bin;%PATH%"
+    echo "Setting JAVA_HOME..."
+    setx JAVA_HOME "C:\Program Files\Java\jdk-21" /M
+    set JAVA_HOME="C:\Program Files\Java\jdk-21"
+    set PATH=%JAVA_HOME%\bin;%PATH%
+    echo "JAVA_HOME is set to %JAVA_HOME%"
   displayName: 'Set JAVA_HOME'
 
-# Ensure Maven is available and in PATH
+# Ensure MAVEN_HOME is correctly set
 - script: |
-    set MAVEN_HOME=C:\Users\apache-maven-3.9.9
+    echo "Setting MAVEN_HOME..."
+    setx MAVEN_HOME "C:\Users\apache-maven-3.9.9" /M
+    set MAVEN_HOME="C:\Users\apache-maven-3.9.9"
     set PATH=%MAVEN_HOME%\bin;%PATH%
-    echo "Maven path: %MAVEN_HOME%\bin"
+    echo "MAVEN_HOME is set to %MAVEN_HOME%"
   displayName: 'Set MAVEN_HOME'
 
 # Verify Java & Maven installation
 - script: |
-    echo "Checking Java version..."
+    echo Checking Java version...
     java -version
-    echo "Checking Maven version..."
-    mvn -version
+    echo Checking Maven version...
+    call mvn -version
   displayName: 'Verify Java & Maven'
 
 # Build with Maven
@@ -32,7 +37,7 @@ steps:
     mavenPomFile: 'DevOPS_Lab/happytails/pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '21'  # Use installed Java 21 instead of 22
+    jdkVersionOption: '21'  # Java 21 is installed
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
