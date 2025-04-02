@@ -1,8 +1,3 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - main
 
@@ -10,14 +5,27 @@ pool:
   name: 'Devpool'
 
 steps:
+# Set JAVA_HOME explicitly to avoid JAVA_HOME errors
+- script: |
+    echo "##vso[task.setvariable variable=JAVA_HOME]C:\Program Files\Java\jdk-22"
+    echo "##vso[task.setvariable variable=PATH]%JAVA_HOME%\bin;%PATH%"
+  displayName: 'Set JAVA_HOME'
+
+# Verify Java & Maven versions before proceeding
+- script: |
+    java -version
+    mvn -version
+  displayName: 'Verify Java & Maven'
+
+# Ensure Maven is installed and accessible
 - task: Maven@3
   inputs:
-    
     mavenPomFile: 'DevOPS_Lab/happytails/pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.22'
+    jdkVersionOption: '22'  # Fixed version (was incorrectly set as '1.22')
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package -DskipTests'
+    goals: 'clean package -DskipTests'
+  displayName: 'Build with Maven'
